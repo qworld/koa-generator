@@ -29,3 +29,9 @@ play
 .DS_Store
 .vscode
 package-lock.json
+
+#lock
+*.lock
+
+#yarn file
+yarn.*

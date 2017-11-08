@@ -147,10 +147,10 @@ function createApplication(app_name, path) {
           copy_template('ejs/index.ejs', path + '/views/index.ejs');
           copy_template('ejs/error.ejs', path + '/views/error.ejs');
           break;
-        case 'nunjucks':
-          copy_template('nunjucks/index.nunjucks', path + '/views/index.nunjucks');
-          copy_template('nunjucks/layout.nunjucks', path + '/views/layout.nunjucks');
-          copy_template('nunjucks/error.nunjucks', path + '/views/error.nunjucks');
+        case 'njk':
+          copy_template('nunjucks/index.njk', path + '/views/index.njk');
+          copy_template('nunjucks/layout.njk', path + '/views/layout.njk');
+          copy_template('nunjucks/error.njk', path + '/views/error.njk');
           break;
         case 'jade':
         case 'pug':
@@ -202,7 +202,7 @@ function createApplication(app_name, path) {
       }
       , "dependencies": {
         "debug": "^2.6.3",
-        "koa": "^2.2.0",
+        "koa": "^2.3.0",
         "koa-bodyparser": "^3.2.0",
         "koa-convert": "^1.2.0",
         "koa-json": "^2.0.2",
@@ -213,7 +213,7 @@ function createApplication(app_name, path) {
         "koa-views": "^5.2.1"
       }
       , "devDependencies": {
-        "nodemon": "^1.8.1"
+        "nodemon": "latest"
       }
     }
 
@@ -226,15 +226,16 @@ function createApplication(app_name, path) {
       case 'ejs':
         pkg.dependencies['ejs'] = '~2.3.3';
         break;
-      case 'nunjucks':
+      case 'njk':
         pkg.dependencies['nunjucks'] = '~3.0.0 ';
+        app = app.replace('\'{views}\'', '\'{views}\',\n  map: {njk: \'nunjucks\'}');
         break;
       case 'hjs':
         pkg.dependencies['hjs'] = '~0.0.6';
         break;
       case 'hbs':
         pkg.dependencies['handlebars'] = '~4.0.5';
-        app = app.replace('\'{views}\'', '\'{views}\',\n  map: { hbs: \'handlebars\' }');
+        app = app.replace('\'{views}\'', '\'{views}\',\n  map: {hbs: \'handlebars\'}');
         break;
       default:
     }
@@ -358,7 +359,7 @@ function main() {
   if (program.jade) program.template = 'pug';
   if (program.hogan) program.template = 'hjs';
   if (program.hbs) program.template = 'hbs';
-  if (program.nunjucks) program.template = 'nunjucks';
+  if (program.nunjucks) program.template = 'njk';
 
   // Generate application
   emptyDirectory(destinationPath, function (empty) {
